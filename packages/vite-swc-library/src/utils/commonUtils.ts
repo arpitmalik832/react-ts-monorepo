@@ -1,12 +1,12 @@
-import { VoidFunction } from '../types/types.d';
+import { VoidFunctionWithArgs } from '../types/types.d';
 import { errorLog } from './logsUtils';
 
 function isNonInteger<T>(val: T) {
   return val === '.' || !/^[0-9,]*$/.test(val as string);
 }
 
-function triggerCallback<T extends VoidFunction>(
-  callback?: VoidFunction,
+function triggerCallback<T extends VoidFunctionWithArgs>(
+  callback?: T,
   ...args: Parameters<T>
 ) {
   if (callback && typeof callback === 'function') {

@@ -1,5 +1,5 @@
 {
-  "name": "react-ts-rollup-swc-monorepo-library",
+  "name": "@arpitmalik832/react-ts-rollup-swc-monorepo-library",
   "version": "0.0.0",
   "description": "A React JS starter code",
   "type": "module",
@@ -72,9 +72,6 @@
     "prettier:fix": "prettier --write --ignore-unknown",
     "lint:fix": "yarn lint-js:fix \"**/*.{mts,cts,ts,tsx,mjs,cjs,js,jsx,mdx}\" && yarn lint-css:fix \"**/*.{css,scss}\" && yarn prettier:fix .",
     "lint-staged": "lint-staged",
-    "grant-permissions:husky": "chmod +x .husky/*",
-    "prepare": "husky install && yarn grant-permissions:husky",
-    "commit": "git-cz",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:ss-update": "jest -u",

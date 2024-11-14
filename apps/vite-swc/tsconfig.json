@@ -9,8 +9,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "declaration": true, // Generate declaration files
-    "declarationDir": "dist/types", // Output directory for declaration files
+    "declaration": false,
     "emitDeclarationOnly": false,
     "downlevelIteration": true
   },

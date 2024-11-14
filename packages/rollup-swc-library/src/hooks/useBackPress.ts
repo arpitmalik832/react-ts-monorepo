@@ -9,7 +9,11 @@ import {
 } from '../redux/slices/navigationSlice';
 import beforeUnload from '../utils/eventListeners/beforeUnload';
 import { log } from '../utils/logsUtils';
-import { ReduxState, NavigationRedux, VoidFunction } from '../types/types.d';
+import {
+  ReduxState,
+  NavigationRedux,
+  VoidFunctionWithArgs,
+} from '../types/types.d';
 
 function useBackPress() {
   const { stack } = useSelector<ReduxState, NavigationRedux>(
@@ -38,7 +42,7 @@ function useBackPress() {
     };
   }, []);
 
-  function push(callback: VoidFunction) {
+  function push(callback: VoidFunctionWithArgs) {
     dispatch(pushStack(callback));
   }
 
