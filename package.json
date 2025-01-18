@@ -23,6 +23,7 @@
     "build": "lerna run build --concurrency 1",
     "build:beta": "lerna run build:beta --concurrency 1",
     "build:prod": "lerna run build:prod --concurrency 1",
+    "lint:tsc": "lerna run lint:tsc --concurrency 1",
     "lint": "lerna run lint --concurrency 1",
     "lint:ci": "lerna run lint:ci --concurrency 1",
     "lint:fix": "lerna run lint:fix --concurrency 1",
