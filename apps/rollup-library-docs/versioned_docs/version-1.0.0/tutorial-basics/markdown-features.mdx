@@ -64,7 +64,7 @@ Markdown code blocks are supported with Syntax highlighting.
     ```
 
 ```jsx title="src/components/HelloDocusaurus.js"
-function HelloDocusaurus() {
+export function HelloDocusaurus() {
   return <h1>Hello, Docusaurus!</h1>;
 }
 ```
@@ -102,44 +102,33 @@ This action is dangerous
 [MDX](https://mdxjs.com/) can make your documentation more **interactive** and allows using any **React components inside Markdown**:
 
 ```jsx
-export const Highlight = ({children, color}) => (
-  <span
-    style={{
-      backgroundColor: color,
-      borderRadius: '20px',
-      color: '#fff',
-      padding: '10px',
-      cursor: 'pointer',
-    }}
-    onClick={() => {
-      alert(`You clicked the color ${color} with label ${children}`)
-    }}>
-    {children}
-  </span>
-);
+export const Highlight = ({ children, color }) => {
+  const handleClick = () => {
+    alert(`You clicked the color ${color} with label ${children}`);
+  };
 
-This is <Highlight color="#25c2a0">Docusaurus green</Highlight> !
+  const handleKeyDown = e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      handleClick();
+    }
+  };
 
-This is <Highlight color="#1877F2">Facebook blue</Highlight> !
+  return (
+    <button
+      type="button"
+      style={{
+        backgroundColor: color,
+        borderRadius: '20px',
+        color: '#fff',
+        padding: '10px',
+        cursor: 'pointer',
+        border: 'none',
+      }}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+    >
+      {children}
+    </button>
+  );
+};
 ```
-
-export const Highlight = ({ children, color }) => (
-  <span
-    style={{
-      backgroundColor: color,
-      borderRadius: '20px',
-      color: '#fff',
-      padding: '10px',
-      cursor: 'pointer',
-    }}
-    onClick={() => {
-      alert(`You clicked the color ${color} with label ${children}`);
-    }}
-  >
-    {children}
-  </span>
-);
-
-This is <Highlight color="#25c2a0">Docusaurus green</Highlight> !
-
-This is <Highlight color="#1877F2">Facebook blue</Highlight> !

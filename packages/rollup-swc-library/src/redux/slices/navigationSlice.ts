@@ -1,10 +1,14 @@
 import {
   createSlice,
+  PayloadAction,
   SliceCaseReducers,
   SliceSelectors,
 } from '@reduxjs/toolkit';
 
-import { NavigationRedux } from '../../types/types.d';
+import type { NavigationRedux } from '../types';
+import type { VoidFunctionWithParams } from '../../types/types';
+import { SLICE_NAMES } from '../../enums/redux';
+import { errorLog } from '../../utils';
 
 const navigationSlice = createSlice<
   NavigationRedux,
@@ -13,19 +17,29 @@ const navigationSlice = createSlice<
   SliceSelectors<NavigationRedux>,
   string
 >({
-  name: 'navigation',
+  name: SLICE_NAMES.NAVIGATION,
   initialState: {
     stack: [],
   },
   reducers: {
-    pushStack: (state, action) => {
+    pushStack: (
+      state: NavigationRedux,
+      action: PayloadAction<VoidFunctionWithParams>,
+    ) => {
+      if (!action.payload || typeof action.payload !== 'function') {
+        return state;
+      }
       state.stack.push(action.payload);
       return state;
     },
-    popStack: state => {
+    popStack: (state: NavigationRedux) => {
       const top = state.stack.pop();
-      if (top) {
-        top();
+      if (top && typeof top === 'function') {
+        try {
+          top();
+        } catch (error) {
+          errorLog('Error executing callback:', error);
+        }
       }
       return state;
     },
