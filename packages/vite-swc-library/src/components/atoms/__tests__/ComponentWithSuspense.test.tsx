@@ -3,22 +3,18 @@ import '@testing-library/jest-dom';
 
 import ComponentWithSuspense from '../ComponentWithSuspense';
 
-jest.mock('../../organisms/Loader', () => ({
-  default: jest.fn(() => <div data-testid="mock-loader" />),
-}));
+jest.mock('../../organisms/Loader', () => () => (
+  <div data-testid="mock-loader">Loading...</div>
+));
 
 describe('ComponentWithSuspense unit tests', () => {
   afterEach(() => {
     cleanup();
   });
 
-  function Component() {
-    return <div data-testid="mock-component" />;
-  }
+  const Component = () => <div data-testid="mock-component" />;
 
-  function Fallback() {
-    return <div data-testid="mock-fallback" />;
-  }
+  const Fallback = () => <div data-testid="mock-fallback" />;
 
   test('ComponentWithSuspense snapshot test', () => {
     const component = render(

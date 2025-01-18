@@ -1,17 +1,25 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "ES2022",
+    "module": "esnext",
     "jsx": "react-jsx",
     "strict": true,
-    "moduleResolution": "Bundler",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "declaration": false,
+    "declaration": true, // Generate declaration files
+    "declarationDir": "dist/types", // Output directory for declaration files
     "emitDeclarationOnly": false,
     "downlevelIteration": true
   },
-  "include": ["src"]
+  "include": [
+    ".storybook/**/*",
+    "build_utils/**/*",
+    "src/**/*",
+    "jest.setup.ts",
+    "svgr.config.ts",
+    "cypress/**/*"
+  ]
 }

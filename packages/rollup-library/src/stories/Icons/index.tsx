@@ -3,73 +3,75 @@ import { FunctionComponent, useEffect, useRef, useState } from 'react';
 import iconsList from '../../../static/enums/icons_list';
 import { capitalizeFirstChar } from '../../utils/stringUtils';
 import { copyToClipboard } from '../../utils/commonUtils';
-import { errorLog } from '../../utils/logsUtils';
-import { IconProps } from '../../types/types.d';
+import { errorLog, log } from '../../utils/logsUtils';
+import type { IconProps, SVGComponent } from './types';
 
-import s from './index.scss';
+import s from './index.module.scss';
 
-function Icon(props: IconProps) {
+const Icon = (props: IconProps) => {
   const { name } = props;
   const ImportedIconRef = useRef<FunctionComponent | null>(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  const importIcon = () => {
     setLoading(true);
     import(`../../assets/icons/${name}`)
-      .then(comp => {
+      .then((comp: SVGComponent) => {
         ImportedIconRef.current = comp.ReactComponent;
         setLoading(false);
       })
-      .catch(e => {
+      .catch((e: Error) => {
         errorLog('Failed to fetch icon: ', e);
       });
+  };
+
+  useEffect(() => {
+    importIcon();
   }, []);
 
   if (!name || loading || !ImportedIconRef.current) return null;
   // eslint-disable-next-line react/jsx-pascal-case
   return <ImportedIconRef.current />;
-}
+};
 
-function Icons() {
+const Icons = () => {
   const [currentIcon, setCurrentIcon] = useState('');
 
-  function getImportPath() {
-    return `import { ReactComponent as ${capitalizeFirstChar(
+  const getImportPath = () =>
+    `import { ReactComponent as ${capitalizeFirstChar(
       currentIcon.split('/')[1].replace('.svg', ''),
     )} } from 'library_name/icons/${currentIcon}'`;
-  }
 
-  function renderIconSection(
+  const renderIconSection = (
     size: 'sm16' | 'rg24' | 'lg32',
     icons: typeof iconsList,
-  ) {
-    return (
-      <section className={s.iconSection}>
-        <div className={s.sectionName}>{size}</div>
-        <div className={s.icons}>
-          {icons?.map((icon: string) => (
-            <div
-              role="button"
-              tabIndex={0}
-              aria-pressed="false"
-              className={s.iconBox}
-              key={icon}
-              onClick={() => {
+  ) => (
+    <section className={s.iconSection}>
+      <div className={s.sectionName}>{size}</div>
+      <div className={s.icons}>
+        {icons?.map((icon: string) => (
+          <div
+            role="button"
+            data-testid="icon-box"
+            tabIndex={0}
+            aria-pressed="false"
+            className={s.iconBox}
+            key={icon}
+            onClick={() => {
+              setCurrentIcon(icon);
+            }}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ' ') {
                 setCurrentIcon(icon);
-              }}
-              onKeyDown={e => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  setCurrentIcon(icon);
-                }
-              }}
-            >
-              <Icon name={icon} />
-            </div>
-          ))}
-        </div>
-      </section>
-    );
-  }
+              }
+            }}
+          >
+            <Icon name={icon} />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
 
   return (
     <div className={s.iconsListContainer}>
@@ -86,10 +88,12 @@ function Icons() {
         iconsList.filter((icon: string) => icon.includes('lg32'))?.sort(),
       )}
       {currentIcon && (
-        <div className={s.modal}>
+        <div className={s.modal} data-testid="icon-modal">
           <div
             role="button"
+            data-testid="backdrop"
             tabIndex={0}
+            aria-label="backdrop"
             aria-pressed="false"
             className={s.backdrop}
             onClick={() => {
@@ -106,6 +110,7 @@ function Icons() {
               <div className={s.iconName}>{currentIcon}</div>
               <span
                 role="button"
+                data-testid="close-icon"
                 tabIndex={0}
                 aria-pressed="false"
                 className={s.dismissIcon}
@@ -122,18 +127,25 @@ function Icons() {
               </span>
             </section>
             <section className={s.codeSection}>
-              <code className={s.code}>{getImportPath()}</code>
+              <code className={s.code} data-testid="code-element">
+                {getImportPath()}
+              </code>
               <span
                 role="button"
+                data-testid="copy-icon"
                 tabIndex={0}
                 aria-pressed="false"
                 className={s.copyIcon}
                 onClick={() => {
-                  copyToClipboard(getImportPath());
+                  copyToClipboard(getImportPath(), () => {
+                    log('copied');
+                  });
                 }}
                 onKeyDown={e => {
                   if (e.key === 'Enter' || e.key === ' ') {
-                    copyToClipboard(getImportPath());
+                    copyToClipboard(getImportPath(), () => {
+                      log('copied');
+                    });
                   }
                 }}
               >
@@ -145,6 +157,6 @@ function Icons() {
       )}
     </div>
   );
-}
+};
 
 export default Icons;
