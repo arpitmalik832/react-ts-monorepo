@@ -1,42 +1,47 @@
 import tokens from '../../../static/enums/design_tokens.json';
 import { capitalizeFirstChar } from '../../utils/stringUtils';
 import classnames from '../../utils/classNames';
-import s from './index.scss';
+import s from './index.module.scss';
 import {
   ColorInnerType,
   ColorSemanticLabel,
   ColorType,
   ColorTheme,
   PrimitiveColor,
-} from '../../types/types.d';
+} from './types';
 
-function Colors() {
-  function getColorValue(
+const Colors = () => {
+  const getColorValue = (
     type: ColorType,
     innerType: ColorInnerType,
     semanticLabel: ColorSemanticLabel,
     theme: ColorTheme,
-  ) {
+  ) => {
     const colorValue =
-      tokens['color-semantics'][theme][type][innerType][semanticLabel].value;
-    if (colorValue.startsWith('#')) {
+      tokens['color-semantics']?.[theme]?.[type]?.[innerType]?.[semanticLabel]
+        ?.value;
+    if (!colorValue) {
+      return '';
+    }
+    if (colorValue?.startsWith('#')) {
       return colorValue;
     }
     const [, colorName, shade] = colorValue.split('.');
-    return tokens['color-primitives'][colorName as PrimitiveColor][
+    return tokens['color-primitives']?.[colorName as PrimitiveColor]?.[
       shade.replace('}', '') as ColorSemanticLabel
-    ].value;
-  }
+    ]?.value;
+  };
 
-  function renderColorBox(
+  const renderColorBox = (
     type: ColorType,
     innerType: ColorInnerType,
     semanticLabel: ColorSemanticLabel,
     theme: ColorTheme,
-  ) {
+  ) => {
     const colorValue = getColorValue(type, innerType, semanticLabel, theme);
     return (
       <div
+        data-testid="colorCard"
         style={{
           background: colorValue,
         }}
@@ -46,36 +51,39 @@ function Colors() {
           className={classnames(s.colorName, {
             [s.whiteText]: theme === 'light',
           })}
+          data-testid="colorName"
         >{`--${type}-${innerType}-${semanticLabel}`}</div>
         <div
           className={classnames(s.colorCode, {
             [s.whiteText]: theme === 'light',
           })}
+          data-testid="colorCode"
         >
           {colorValue}
         </div>
       </div>
     );
-  }
+  };
 
   return (
-    <div className={s.colorsContainer}>
+    <div data-testid="colorsContainer" className={s.colorsContainer}>
       {Object.entries(tokens['color-semantics'].light).map(
         ([type, properties]) =>
           Object.entries(properties).map(([innerType, innerProperties]) => (
             <section key={type}>
-              <div className={s.sectionHeading}>
+              <div data-testid="type" className={s.sectionHeading}>
                 {capitalizeFirstChar(type)}
               </div>
-              <div className={s.sectionHeading}>
+              <div data-testid="innerType" className={s.sectionHeading}>
                 {capitalizeFirstChar(innerType)}
               </div>
-              <div className={s.themeHeader}>
+              <div data-testid="themeHeader" className={s.themeHeader}>
                 <div>Light</div>
                 <div>Dark</div>
               </div>
               {Object.entries(innerProperties).map(([semanticLabel]) => (
                 <div
+                  data-testid="colorsRow"
                   key={`${type}-${innerType}-${semanticLabel}`}
                   className={s.colorsRow}
                 >
@@ -98,6 +106,6 @@ function Colors() {
       )}
     </div>
   );
-}
+};
 
 export default Colors;
