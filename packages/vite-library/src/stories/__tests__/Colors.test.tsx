@@ -148,8 +148,7 @@ describe('Colors Component', () => {
       const colorRows = getAllByTestId('colorsRow');
 
       colorRows.forEach(row => {
-        const colorCards = Array.from(row.getElementsByClassName('colorCard'));
-        const [lightTheme, darkTheme] = colorCards;
+        const [lightTheme, darkTheme] = row.getElementsByClassName('colorCard');
         expect(lightTheme).toBeInTheDocument();
         expect(darkTheme).toBeInTheDocument();
       });
