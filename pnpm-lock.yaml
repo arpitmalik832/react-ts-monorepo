@@ -20,6 +20,9 @@ importers:
       '@nx/workspace':
         specifier: ^18.0.0
         version: 18.3.5(@swc/core@1.10.9)
+      '@release-it/conventional-changelog':
+        specifier: ^10.0.0
+        version: 10.0.0(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.0.0)(release-it@18.1.1(@types/node@22.10.7)(typescript@5.7.3))
       commitizen:
         specifier: ^4.3.1
         version: 4.3.1(@types/node@22.10.7)(typescript@5.7.3)
@@ -32,6 +35,9 @@ importers:
       nx:
         specifier: ^18.0.0
         version: 18.3.5(@swc/core@1.10.9)
+      release-it:
+        specifier: ^18.1.1
+        version: 18.1.1(@types/node@22.10.7)(typescript@5.7.3)
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1
