@@ -167,7 +167,7 @@
     "@storybook/addon-interactions": "^8.5.0",
     "@storybook/addon-links": "^8.5.0",
     "@storybook/addon-storysource": "^8.5.0",
-    "@storybook/blocks": "^8.5.0",
+    "@storybook/blocks": "^8.5.3",
     "@storybook/react": "8.5.0",
     "@storybook/react-vite": "^8.5.0",
     "@svgr/core": "^8.1.0",
